@@ -4,9 +4,9 @@ import serial
 import time
 import math
 ############################################################################################################
-V_G_inc = 0.05
-V_G_initial = 1.1
-V_G_final = 1.7
+V_G_inc = #set the increment in V_G
+V_G_initial = #set the initial value of V_G
+V_G_final = #set the final value of V_G
 V_G = V_G_initial
 N_G = int(np.floor(abs(V_G_final - V_G_initial)/V_G_inc) + 1)
 #python has some troble with precision
@@ -17,9 +17,9 @@ if (V_G_final-V_G_initial)%V_G_inc > 0:
     N_G += 1
 #N_G = 2
 
-V_D_inc = 1
-V_D_initial = 0 
-V_D_final = 5.0
+V_D_inc = #set the increment in V_D
+V_D_initial = #set the initial value of V_D
+V_D_final = #set the final value of V_D
 V_D = V_D_initial
 N_D = int(np.floor(abs(V_D_final - V_D_initial)/V_D_inc) + 1)
 if (V_D_final-V_D_initial)%V_D_inc > 0:
@@ -208,3 +208,4 @@ plt.grid(True); plt.legend();
 plt.show()
 ###########################################################################################################
 ser.close()
+
