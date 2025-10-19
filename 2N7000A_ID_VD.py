@@ -127,18 +127,18 @@ def Measure_DC_IV(Source_ID = 1):
 #it calculates 1.7 - 1.1 as 0.59999999999999
 #floor(0.59999999999999/0.2) will give 2 instead of 3
 #very inconvenient
-V_G_inc = 0.4
-V_G_initial = 1.3
-V_G_final = 1.7
+V_G_inc = #set the increment in V_G
+V_G_initial = #set the initial value of V_G
+V_G_final = #set the final value of V_G
 V_G = V_G_initial
 N_G = int(np.floor(abs(V_G_final - V_G_initial)/V_G_inc) + 1)
 if (V_G_final-V_G_initial)%V_G_inc > 0:
     N_G += 1
 #N_G = 2
 
-V_D_inc = 0.1
-V_D_initial = 0 #V_D_inc
-V_D_final = 5.0
+V_D_inc = #set the increment id V_D
+V_D_initial = #set the initial value of V_D
+V_D_final = #set the final value of V_D
 V_D = V_D_initial
 N_D = int(np.floor(abs(V_D_final - V_D_initial)/V_D_inc) + 1)
 if (V_D_final-V_D_initial)%V_D_inc > 0:
@@ -238,3 +238,4 @@ plt.grid(True); plt.legend();
 plt.show()
 ###########################################################################################################
 ser.close()
+
