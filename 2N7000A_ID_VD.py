@@ -4,14 +4,14 @@ import serial
 import time
 import math
 ###########################################################################################################
-V_G_inc = 0.1#set the increment in V_G
-V_G_initial = 1.3#set the initial value of V_G
-V_G_final = 1.8#set the final value of V_G
+V_G_inc = #set the increment in V_G
+V_G_initial = #set the initial value of V_G
+V_G_final = #set the final value of V_G
 V_G = V_G_initial
 
-V_D_inc = 0.1#set the increment id V_D
-V_D_initial = 0#set the initial value of V_D
-V_D_final = 5#set the final value of V_D
+V_D_inc = #set the increment id V_D
+V_D_initial = #set the initial value of V_D
+V_D_final = #set the final value of V_D
 V_D = V_D_initial
 
 R_D = 30.15   #2.5
@@ -261,4 +261,5 @@ plt.grid(True); plt.legend();
 plt.show()
 ###########################################################################################################
 ser.close()
+
 
