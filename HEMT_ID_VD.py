@@ -4,14 +4,14 @@ import serial
 import time
 import math
 ###########################################################################################################
-V_G_inc = 0.1#set the increment in V_G
-V_G_initial = 1.4#set the initial value of V_G
-V_G_final = 1.7#set the final value of V_G
+V_G_inc = #set the increment in V_G
+V_G_initial = #set the initial value of V_G
+V_G_final = #set the final value of V_G
 V_G = V_G_initial
 
-V_D_inc = 0.04#set the increment id V_D
-V_D_initial = 0#set the initial value of V_D
-V_D_final = 0.8#set the final value of V_D
+V_D_inc = #set the increment id V_D
+V_D_initial = #set the initial value of V_D
+V_D_final = #set the final value of V_D
 V_D = V_D_initial
 
 R_D = 0 #30.15   #2.5
@@ -19,7 +19,7 @@ R_D = 0 #30.15   #2.5
 plot_every_sweep = False
 ###########################################################################################################
 #check data limits
-V_D_limit = 5
+V_D_limit = 0.8
 if V_D_final > V_D_limit:
     print(f"V_D_final = {V_D_final}V > {V_D_limit}V; Keep the V_D under {V_D_limit}V")
     print("Edit the Voltage Values Properly.")
@@ -269,4 +269,5 @@ plt.grid(True); plt.legend();
 plt.show()
 ###########################################################################################################
 ser.close()
+
 
