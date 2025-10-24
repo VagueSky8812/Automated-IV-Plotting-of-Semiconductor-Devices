@@ -4,14 +4,14 @@ import serial
 import time
 import math
 ############################################################################################################
-V_G_inc = 0.03#set the increment in V_G
-V_G_initial = 1.25#set the initial value of V_G
-V_G_final = 2.0#set the final value of V_G
+V_G_inc = #set the increment in V_G
+V_G_initial = #set the initial value of V_G
+V_G_final = #set the final value of V_G
 V_G = V_G_initial
 
-V_D_inc = 0.1#set the increment in V_D
-V_D_initial = 0.1#set the initial value of V_D
-V_D_final = 0.4#set the final value of V_D
+V_D_inc = #set the increment in V_D
+V_D_initial = #set the initial value of V_D
+V_D_final = #set the final value of V_D
 V_D = V_D_initial
 
 plot_every_sweep = False
@@ -238,4 +238,5 @@ plt.grid(True); plt.legend();
 plt.show()
 ###########################################################################################################
 ser.close()
+
 
