@@ -70,9 +70,11 @@ def Set_DC_Voltage_PSupply(Source_ID, Vapp):
             voltage_str = send_query('MEAS:VOLT?')
         voltage = float(voltage_str.split("\n", 1)[0])
         #print(f"Voltage read = {voltage}")
-        if (voltage < 0.01):     #don't do it for 10mV or lower measures
+        if (abs(voltage) < 0.01):     #don't do it for 10mV or lower measures
             break
-        voltage_rel_err = abs(1 - voltage/voltage_target)
+        
+        if voltage_target != 0:
+            voltage_rel_err = abs(1 - voltage/voltage_target)
         #print(f"Target Voltage = {Vapp}V; Measured Voltage = {voltage}V; Rel Error = {voltage_rel_err}")
     return voltage
     #time.sleep(0.5)
@@ -106,17 +108,17 @@ def Measure_DC_I(Source_ID = 1):
     return current
 
 ###########################################################################################################
-def Control_IV_Voltage(Source_TD, Vcont):
-    V_D_measured = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=Vcont)
-    V_D_Supply = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=Vcont)
+def Control_IV_Voltage(Source_ID, Vcont):
+    V_D_measured = Set_DC_Voltage_PSupply(Source_ID, Vapp=Vcont)
+    V_D_Supply = Set_DC_Voltage_PSupply(Source_ID, Vapp=Vcont)
     #control Drain current because acutal V_DS may drop from applied due to supply resistance R_out
     #V_D_measured = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=V_D)
     #V_D_measured_rel_error = 1
     V_D_measured_err = 1
-    I_D_measured = Measure_DC_I(Source_ID=1)
-    while(abs(V_D_measured_err) > 0.01):
-        V_D_Supply = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=(Vcont + R_out*I_D_measured))
-        I_D_measured = Measure_DC_I(Source_ID=1)
+    I_D_measured = Measure_DC_I(Source_ID)
+    while(abs(V_D_measured_err) > 0.005):
+        V_D_Supply = Set_DC_Voltage_PSupply(Source_ID, Vapp=(Vcont + R_out*I_D_measured))
+        I_D_measured = Measure_DC_I(Source_ID)
         V_D_measured = V_D_Supply - I_D_measured*R_out
             
         if (V_D_measured < 0.01):
