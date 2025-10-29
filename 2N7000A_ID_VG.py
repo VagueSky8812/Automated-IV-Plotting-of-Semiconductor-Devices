@@ -3,20 +3,20 @@ import matplotlib.pyplot as plt
 import serial
 import time
 import math
-from Functions import ser, send_query, send, Set_DC_Voltage_PSupply, Measure_DC_I
+from Functions import ser, send_query, send, Set_DC_Voltage_PSupply, Measure_DC_I, R_out, Control_IV_Voltage
 
 ############################################################################################################
-V_G_inc = #set the increment in V_G
-V_G_initial = #set the initial value of V_G
-V_G_final = #set the final value of V_G
+V_G_inc = 0.1#set the increment in V_G
+V_G_initial = 1.1#set the initial value of V_G
+V_G_final = 4#set the final value of V_G
 V_G = V_G_initial
 
-V_D_inc = #set the increment in V_D
-V_D_initial = #set the initial value of V_D
-V_D_final = #set the final value of V_D
+V_D_inc = 0.1#set the increment in V_D
+V_D_initial = 0.2#set the initial value of V_D
+V_D_final = 0.4#set the final value of V_D
 V_D = V_D_initial
 
-plot_every_sweep = False
+plot_every_sweep = True
 ###########################################################################################################
 #check data limits
 V_D_limit = 5
@@ -26,7 +26,7 @@ if V_D_final > V_D_limit:
     print("Exiting Code...")
     exit()
 
-V_G_limit = 2.2
+V_G_limit = 4.2
 if V_G_final > V_G_limit:
     print(f"V_G_final = {V_G_final}V > {V_G_limit}V; Keep the V_G under {V_G_limit}V")
     print("Edit the Voltage Values Properly.")
@@ -60,7 +60,7 @@ send('OUTP ON')
 time.sleep(0.5)
 
 #set max current levels to 2A, 2A, 100ma
-send("APP:CURR 2, 2, 0.1")
+send("APP:CURR 3, 3, 3")
 
 #ID VD Characteristics for different VG
 ############################################################################################################
@@ -69,10 +69,13 @@ send("APP:CURR 2, 2, 0.1")
 #Take the input voltage reading
 #take the output voltage reading
 
+#
+
 for j in range(N_D):
     #print(f"j = {j} before I_D V_D sweep")
     #V_G = i*V_D_inc
     V_D_measured = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=V_D)
+    V_D_Supply = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=V_D)
     print(f"V_D = {V_D}")
 
     V_G = V_G_initial
@@ -87,10 +90,14 @@ for j in range(N_D):
     for i in range(N_G):
         #Apply gATE Voltage
         V_G_measured = Set_DC_Voltage_PSupply(Source_ID=3, Vapp=V_G)
+        #no need for gate voltage control, as gate resistance is inf
+
+        #control Drain current because acutal V_DS may drop from applied due to supply resistance R_out
+        V_D_measured = Control_IV_Voltage(Source_ID=1, Vcont=V_D)
 
         #Measure Drain voltage and currrent
         I_D_measured = Measure_DC_I(Source_ID=1)
-        if (I_D_measured > 0.49):
+        if (I_D_measured > 0.35):
             break
 
         V_G_array[i] = V_G_measured
