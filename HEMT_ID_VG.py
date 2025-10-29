@@ -3,20 +3,20 @@ import matplotlib.pyplot as plt
 import serial
 import time
 import math
-from Functions import ser, send_query, send, Set_DC_Voltage_PSupply, Measure_DC_I
+from Functions import ser, send_query, send, Set_DC_Voltage_PSupply, Measure_DC_I, R_out, Control_IV_Voltage
 
 ############################################################################################################
 V_G_inc = 0.03#set the increment in V_G
 V_G_initial = 1.25#set the initial value of V_G
-V_G_final = 2.0#set the final value of V_G
+V_G_final = 3#set the final value of V_G
 V_G = V_G_initial
 
-V_D_inc = 0.2#set the increment in V_D
+V_D_inc = 0.1#set the increment in V_D
 V_D_initial = 0.2#set the initial value of V_D
-V_D_final = 0.6#set the final value of V_D
+V_D_final = 0.4#set the final value of V_D
 V_D = V_D_initial
 
-plot_every_sweep = False
+plot_every_sweep = True
 ###########################################################################################################
 #check data limits
 V_D_limit = 2.2
@@ -26,7 +26,7 @@ if V_D_final > V_D_limit:
     print("Exiting Code...")
     exit()
 
-V_G_limit = 2
+V_G_limit = 4.2
 if V_G_final > V_G_limit:
     print(f"V_G_final = {V_G_final}V > {V_G_limit}V; Keep the V_G under {V_G_limit}V")
     print("Edit the Voltage Values Properly.")
@@ -94,6 +94,9 @@ for j in range(N_D):
     for i in range(N_G):
         #Apply gATE Voltage
         V_G_measured = Set_DC_Voltage_PSupply(Source_ID=3, Vapp=V_G)
+
+        #control Drain current because acutal V_DS may drop from applied due to supply resistance R_out
+        V_D_measured = Control_IV_Voltage(Source_ID=1, Vcont=V_D)
 
         #Measure Drain voltage and currrent
         I_D_measured = Measure_DC_I(Source_ID=1)
