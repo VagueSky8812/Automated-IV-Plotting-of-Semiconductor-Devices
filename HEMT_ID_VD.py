@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 import serial
 import time
 import math
-from Functions import ser, send_query, send, Set_DC_Voltage_PSupply, Measure_DC_I
+from Functions import ser, send_query, send, Set_DC_Voltage_PSupply, Measure_DC_I, R_out, Control_IV_Voltage
 
 ###########################################################################################################
-V_G_inc = #set the increment in V_G
-V_G_initial = #set the initial value of V_G
-V_G_final = #set the final value of V_G
+V_G_inc = 0.1#set the increment in V_G
+V_G_initial = 1.4#set the initial value of V_G
+V_G_final = 1.7#set the final value of V_G
 V_G = V_G_initial
 
-V_D_inc = #set the increment id V_D
-V_D_initial = #set the initial value of V_D
-V_D_final = #set the final value of V_D
+V_D_inc = 0.04#set the increment id V_D
+V_D_initial = 0#set the initial value of V_D
+V_D_final = 1.5#set the final value of V_D
 V_D = V_D_initial
 
 R_D = 0 #30.15   #2.5
@@ -46,7 +46,7 @@ send('SYST:REM')
 send('*RST')
 
 #set max current levels to 2A, 2A, 100ma
-send("APP:CURR 2, 2, 0.1")
+send("APP:CURR 3, 3, 3")
 
 Set_DC_Voltage_PSupply(Source_ID=1, Vapp=0)
 Set_DC_Voltage_PSupply(Source_ID=2, Vapp=0)
@@ -97,7 +97,8 @@ for j in range(N_G):
         #Set_DC_Voltage_PSupply(Source_ID = "1", frequency=1e3, amplitude=0.5*Vapplied, duty_cycle = 99.6)
 
         #Apply Voltage
-        V_D_measured = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=V_D)
+        V_D_measured = Control_IV_Voltage(Source_ID=1, Vcont=V_D)
+
         #Measure voltage
         I_D_measured = Measure_DC_I(Source_ID=1)
         #if (I_D_measured > 0.49):
@@ -105,7 +106,7 @@ for j in range(N_G):
 
         V_D_array[i] = V_D_measured - I_D_measured*R_D
         I_D_array[i] = I_D_measured
-        print(f"V_D_measured = {V_D_measured}V;\t I_D_measured = {I_D_measured}A")
+        #print(f"V_D_measured = {V_D_measured}V;\t I_D_measured = {I_D_measured}A")
         print(f"V_D = {V_D_array[i]}V;\t I_D = {I_D_array[i]}A")
         #print(f"i = {i}; j = {j}\n")
         V_D += V_D_inc
