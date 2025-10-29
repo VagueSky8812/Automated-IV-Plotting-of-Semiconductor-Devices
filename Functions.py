@@ -5,6 +5,10 @@ import time
 import math
 
 ###########################################################################################################
+R_out = 0.11   #output resistance of power supply; 
+#can cause trouble with high current cases; especially for ID_VG sweeps
+
+###########################################################################################################
 ser = serial.Serial(
     port='COM5',      # your COM port
     baudrate=9600,
@@ -102,3 +106,21 @@ def Measure_DC_I(Source_ID = 1):
     return current
 
 ###########################################################################################################
+def Control_IV_Voltage(Source_TD, Vcont):
+    V_D_measured = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=Vcont)
+    V_D_Supply = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=Vcont)
+    #control Drain current because acutal V_DS may drop from applied due to supply resistance R_out
+    #V_D_measured = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=V_D)
+    #V_D_measured_rel_error = 1
+    V_D_measured_err = 1
+    I_D_measured = Measure_DC_I(Source_ID=1)
+    while(abs(V_D_measured_err) > 0.01):
+        V_D_Supply = Set_DC_Voltage_PSupply(Source_ID=1, Vapp=(Vcont + R_out*I_D_measured))
+        I_D_measured = Measure_DC_I(Source_ID=1)
+        V_D_measured = V_D_Supply - I_D_measured*R_out
+            
+        if (V_D_measured < 0.01):
+            break
+        V_D_measured_err = Vcont - V_D_measured
+        #V_D_measured_rel_error = (1 - V_D_measured/Vcont)
+    return V_D_measured
