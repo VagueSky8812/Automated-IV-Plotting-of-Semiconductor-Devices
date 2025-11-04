@@ -116,7 +116,7 @@ def Control_IV_Voltage(Source_ID, Vcont):
     #V_D_measured_rel_error = 1
     V_D_measured_err = 1
     I_D_measured = Measure_DC_I(Source_ID)
-    while(abs(V_D_measured_err) > 0.005):
+    while(abs(V_D_measured_err) > 0.01):
         V_D_Supply = Set_DC_Voltage_PSupply(Source_ID, Vapp=(Vcont + R_out*I_D_measured))
         I_D_measured = Measure_DC_I(Source_ID)
         V_D_measured = V_D_Supply - I_D_measured*R_out
@@ -126,3 +126,4 @@ def Control_IV_Voltage(Source_ID, Vcont):
         V_D_measured_err = Vcont - V_D_measured
         #V_D_measured_rel_error = (1 - V_D_measured/Vcont)
     return V_D_measured
+
